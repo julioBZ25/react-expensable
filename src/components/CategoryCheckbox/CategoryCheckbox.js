@@ -7,8 +7,6 @@ const Container = styled.div`
   display: flex;
   gap: 1rem;
   flex-direction: column;
-  padding: 24px 8px 0 32px;
-  border-left: 1px solid #D1D5DB;
 `;
 
 const SytledCheckbox = styled.input`
@@ -17,12 +15,9 @@ const SytledCheckbox = styled.input`
   accent-color: ${colors.stone[300]};
 `;
 
-const CategoryTitle = styled.p`
+export const FilterTitle = styled.p`
   ${typography.text['md']}
-`;
-
-const TransactionTitle =styled.h1` 
-  ${typography.head['sm']}
+  ${colors.gray['500']}
 `;
 
 const LabelCheckbox = styled.label`
@@ -46,8 +41,7 @@ function CategoryCheckbox() {
 
   return (
     <Container>
-      <TransactionTitle>Transactions</TransactionTitle>
-      <CategoryTitle>Category</CategoryTitle>
+      <FilterTitle>Category</FilterTitle>
       <CheckboxesContainer>
         {categories.map( (cat) => {
           return (

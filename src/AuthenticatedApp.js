@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import CategoriesPage from "./pages/categories-page";
 import { CategoryProvider } from "./context/category-context";
-import CategoryCheckbox from "./components/CategoryCheckbox/CategoryCheckbox";
+import Aside from "./components/Aside/Aside";
 
 
 const Container = styled.div`
@@ -32,9 +32,8 @@ function AuthenticatedApp() {
             <Route path="/budgets" element={<h1>Budgets</h1>} />
           </Routes>
         </MainContainer>
-        <CategoryCheckbox />
+        <Aside />
       </CategoryProvider>
-
     </Container>
   );
 }
