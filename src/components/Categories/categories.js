@@ -64,6 +64,7 @@ function Categories({ date, type }) {
       .then((data) => {
         setCategories(data);
         setLoading(false);
+        console.log(data)
       })
       .catch((error) => {
         setLoading(false);
@@ -86,7 +87,7 @@ function Categories({ date, type }) {
 
   function handleCalcSubmit(categoryId, amount, date) {
     apiFetch(`categories/${categoryId}/transactions`, {
-      body: { amount, date },
+      body: { amount: parseInt(amount), date },
     })
       .then((trx) => {
         const newCategories = [...categories];
