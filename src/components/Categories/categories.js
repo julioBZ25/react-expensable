@@ -7,6 +7,8 @@ import styled from "@emotion/styled";
 import { colors, typography } from "../../styles";
 import Calculator from "../Calculator/calculator";
 import NewCategoryForm from "./new-category-form";
+import CategoryCheckbox from "../CategoryCheckbox/CategoryCheckbox";
+import { useCategories } from "../../context/category-context";
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,31 +49,16 @@ const Modal = styled.div`
 `;
 
 function Categories({ date, type }) {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
   const [isOpenCalcModal, setIsOpenCalcModal] = useState(false);
   const [isOpenCatModal, setIsOpenCatModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  const { categories, setCategories, loading, error } = useCategories()
+
   const monthlyData = getMonthlyData(categories, date, type);
   const total = monthlyData.reduce((acc, cur) => acc + cur.amount, 0);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    apiFetch("categories")
-      .then((data) => {
-        setCategories(data);
-        setLoading(false);
-        console.log(data)
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(error);
-      });
-  }, []);
-
+  
   function handleCategoryClick(category) {
     setSelectedCategory(category);
     setIsOpenCalcModal(true);
