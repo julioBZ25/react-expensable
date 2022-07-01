@@ -1,10 +1,10 @@
 import * as Style from "./styles";
 
-function Input({ label, type, value = "", placeholder = "" }) {
+function InputFilter({ label, type, value, placeholder = "" }) {
   return (
     <Style.Container>
       <Style.Label htmlFor={label}>{label}</Style.Label>
-      <Style.Input
+      <Style.StyledInput
         id={label}
         name={label}
         type={type || "text"}
@@ -15,4 +15,4 @@ function Input({ label, type, value = "", placeholder = "" }) {
   );
 }
 
-export default Input;
+export default InputFilter;

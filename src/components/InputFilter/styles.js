@@ -18,11 +18,18 @@ export const Label = styled.label`
 
 export const StyledInput = styled.input`
   border: 1px solid ${colors.gray[200]};
+  color: ${colors.gray[500]};
   outline: none;
   box-sizing: border-box;
   padding: 8px 12px;
+  font-size: 14px;
   gap: 10px;
   background-color: ${ colors.white };
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   border-radius: 6px;
+  max-width: 140px;
+  &:focus {
+    border: 1px solid ${colors.pink[400]};
+    box-shadow: 0px 0px 4px ${colors.pink[400]};
+  }
 `;
