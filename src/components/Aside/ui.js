@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { fonts, colors } from "../../styles";
+import { colors, fonts } from "../../styles";
 
 export const Section = styled.div`
   max-width: 295px;
@@ -19,4 +19,10 @@ export const InputsContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 1rem;
+`;
+
+export const CardsWrapper = styled.div`
+  max-width: 295px;
+  display: flex;
+  flex-direction: column;
 `;

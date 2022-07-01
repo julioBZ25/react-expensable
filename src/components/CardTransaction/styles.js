@@ -2,13 +2,13 @@ import styled from "@emotion/styled";
 import { colors, fonts } from "../../styles";
 
 export const Container = styled.div`
-  max-width: 295px;
+  width: 100%;
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   font-family: ${fonts.primary};
-  background-color: ${({ type }) => type === "day" ? colors.gray[50] : colors.white };
+  background-color: ${({ type }) => type === "day" ? colors.gray[200] : colors.white };
 `;
 
 export const Day = styled.h2`

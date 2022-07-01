@@ -2,7 +2,7 @@ import { categoryColors, categoryIcons } from "../../utils";
 import CircleIcon from "../CircleIcon";
 import * as Style from "./styles";
 
-function CardTransaction({ type, date, amount, transaction, description, tran_type, icon, color }) {
+function CardTransaction({ type, date, amount, transaction, description, tran_type, iconName, color }) {
   const newDate = new Date(date) // date should be a string: "2022-07-01"
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const dateString = newDate.toLocaleDateString("en-US", options).replaceAll(",", "");
@@ -26,8 +26,7 @@ function CardTransaction({ type, date, amount, transaction, description, tran_ty
         <>
           <CircleIcon 
             color={categoryColors[color]}
-            Icon={categoryIcons[icon]}
-            inverted={true}
+            Icon={categoryIcons[iconName]}
           />
           <Style.Info>
             <Style.Text isHead={true}>{ transaction }</Style.Text>
