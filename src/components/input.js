@@ -6,10 +6,11 @@ const Label = styled.label``;
 const StyledInput = styled.input`
   padding: 0.5rem;
   ${typography.lg};
-  border-radius: 1rem;
+  border-radius: 6px;
   border: 1px solid ${colors.gray[400]};
   background-color: white;
   color: ${colors.gray.dark};
+  width: 100%;
 `;
 
 const InputContainer = styled.div`
