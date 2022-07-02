@@ -39,15 +39,25 @@ const CheckboxDiv = styled.div`
 function CategoryCheckbox() {
   const { categories } = useCategories();
 
+  function handleChange(e) {
+    console.log(e.target.name)
+  }
+
   return (
     <Container>
       <FilterTitle>Category</FilterTitle>
       <CheckboxesContainer>
-        {categories.map( (cat) => {
+        {categories.map( (cat, index) => {
           return (
-          <CheckboxDiv>
-            <SytledCheckbox type="checkbox" id={cat.id || cat.name} name={cat.name}/>
-            <LabelCheckbox htmlFor={cat.id || cat.name}>{cat.name}</LabelCheckbox>
+          <CheckboxDiv key={index}>
+            <SytledCheckbox
+              type="checkbox"
+              id={cat.id || cat.name}
+              name={cat.name}
+              onChange={handleChange}
+              key={index}
+            />
+            <LabelCheckbox key={index + 1} htmlFor={cat.id || cat.name}>{cat.name}</LabelCheckbox>
           </CheckboxDiv>)
         })}
       </CheckboxesContainer>

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { useEffect, useState } from 'react';
 import { useCategories } from '../../context/category-context';
 import { typography } from '../../styles';
 import CardTransaction from '../CardTransaction';
@@ -19,33 +20,47 @@ const AsideWrapper =  styled.div`
 `;
 
 function Aside(){
+  const { transactions, params, categories, setTransactions } = useCategories();
+  const [transacFilter, setTransacFilter] = useState([]);
 
-  const { categories, params } = useCategories();
+  useEffect(() => {
+    let partial = [];
+    categories.forEach(category => {
+      const newTransactions = category.transactions.map(transaction => (
+        {
+          ...transaction,
+          categoryName: category.name,
+          color: category.color,
+          icon: category.icon,
+          tran_type: category.transaction_type
+        }
+        ));
+        
+        partial.push(...newTransactions)}
+        );
 
-  let transactions = [];
-  categories.forEach(category => {
-    const newTransactions = category.transactions.map(transaction => (
-      {
-        ...transaction,
-        categoryName: category.name,
-        color: category.color,
-        icon: category.icon,
-        tran_type: category.transaction_type
-      }
-    ));
+    partial = partial?.reduce((tran, acc) => {
+      tran[acc.date] = [...tran[acc.date] || [], acc];
+      return tran;
+    }, {})
 
-    transactions.push(...newTransactions)}
-  );
+    setTransactions(partial);
+    setTransacFilter(partial);
+  }, [categories, setTransactions]);
 
-  transactions = transactions?.reduce((tran, acc) => {
-    tran[acc.date] = [...tran[acc.date] || [], acc];
-    return tran;
-  }, {})
-
-  const dates = Object.keys(transactions).filter(date => {
+  const dates = Object.keys(transacFilter).filter(date => {
     const [ year, month ] = date.split("-");
     return parseInt(year) === parseInt(params.year) && parseInt(month) - 1 === parseInt(params.month);
   })
+
+  function handleChecked(value) {
+    let newTransactions = {};
+
+    dates.forEach(date => {
+      newTransactions[date] = transactions[date].filter(transac => (transac.categoryName.includes(value)))
+    })
+    setTransacFilter(newTransactions);
+  }
 
   return(
     <AsideWrapper>
@@ -69,7 +84,9 @@ function Aside(){
 
       <Style.CardsWrapper>
       { dates.map((date, index) => {
-          const amount = transactions[date].reduce((acc, el) => el.amount + acc , 0);
+          const amount = transacFilter[date].reduce((acc, el) => (
+            el.tran_type === "expense" ? acc - el.amount : el.amount + acc 
+          ), 0);
 
           return (
             <>
@@ -78,8 +95,9 @@ function Aside(){
                 date={date}
                 amount={amount}
                 key={index}
+                tran_type={amount < 0 ? "expense" : "income"}
               />
-              {transactions[date].map((transaction, index) => (
+              {transacFilter[date].map((transaction, index) => (
                 <CardTransaction 
                   type="transaction"
                   date={transaction.date}
