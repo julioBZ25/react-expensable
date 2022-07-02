@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { typography } from '../../styles';
-import AmountFilter from '../AmountFilter/AmountFilter';
 import CardTransaction from '../CardTransaction';
 import CategoryCheckbox from '../CategoryCheckbox/CategoryCheckbox';
 import InputFilter from '../InputFilter';
@@ -24,7 +23,14 @@ function Aside(){
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
       <CategoryCheckbox/>
-      <AmountFilter/>
+      <Style.Section>
+        <Style.Title>Amount</Style.Title>
+        <Style.InputsContainer>
+          <InputFilter label="min"/>
+          <InputFilter label="max"/>
+        </Style.InputsContainer>
+      </Style.Section>
+
       <Style.Section>
         <Style.Title>Date</Style.Title>
         <Style.InputsContainer>
@@ -32,6 +38,7 @@ function Aside(){
           <InputFilter label="to" type="date"/>
         </Style.InputsContainer>
       </Style.Section>
+
       <Style.CardsWrapper>
         <CardTransaction 
           type="day"
