@@ -7,12 +7,21 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     getUser()
-      .then(setUser)
-      .catch((error) => console.log(error));
+      .then(data => {
+        setTimeout(() => {
+          setUser(data);
+          setIsLoading(false)
+        }, 500);
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        console.log(error)
+      });
   }, []);
 
   function handleLogin(credentials) {
@@ -40,6 +49,7 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        isLoading,
         login: handleLogin,
         signup: handleSignup,
         logout: handleLogout,
