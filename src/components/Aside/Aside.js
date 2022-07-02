@@ -69,7 +69,9 @@ function Aside(){
 
       <Style.CardsWrapper>
       { dates.map((date, index) => {
-          const amount = transactions[date].reduce((acc, el) => el.amount + acc , 0);
+          const amount = transactions[date].reduce((acc, el) => (
+            el.tran_type === "expense" ? acc - el.amount : el.amount + acc 
+          ), 0);
 
           return (
             <>
@@ -78,6 +80,7 @@ function Aside(){
                 date={date}
                 amount={amount}
                 key={index}
+                tran_type={amount < 0 ? "expense" : "income"}
               />
               {transactions[date].map((transaction, index) => (
                 <CardTransaction 
