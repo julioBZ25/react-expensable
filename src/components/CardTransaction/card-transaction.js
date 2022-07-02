@@ -8,8 +8,7 @@ function CardTransaction({ type, date, amount, transaction, description, tran_ty
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const dateString = newDate.toLocaleDateString("en-US", options).replaceAll(",", "");
   const [day, month, weekday, year] = dateString.split(" ");
-  let symbol = amount < 0 ? "-" : "+";
-  symbol = tran_type === "expense" ? "-" : "+";
+  let symbol = tran_type === "expense" ? "-" : "+";
 
   return (
     <Style.Container type={type}>
@@ -24,7 +23,7 @@ function CardTransaction({ type, date, amount, transaction, description, tran_ty
               <Style.Text isHead={true}>{ `${month}, ${year}` }</Style.Text>
             </Style.Info>
           </Style.Section>
-          <Style.Amount tran_type={symbol === "-" ? "expense" : "income"}>{symbol}${ amount }</Style.Amount>      
+          <Style.Amount tran_type={symbol === "-" ? "expense" : "income"}>{symbol}${ amount < 0 ? amount * -1 : amount  }</Style.Amount>      
         </>
         :
         <>
@@ -38,7 +37,7 @@ function CardTransaction({ type, date, amount, transaction, description, tran_ty
               <Style.Text isHead={false}>{ description || "No description" }</Style.Text>
             </Style.Info>
           </Style.Section>
-          <Style.Amount tran_type={symbol === "-" ? "expense" : "income"}>{symbol}${ amount }</Style.Amount>      
+          <Style.Amount tran_type={symbol === "-" ? "expense" : "income"}>{symbol}${ amount < 0 ? amount * -1 : amount  }</Style.Amount>      
         </>
       }
     </Style.Container>
