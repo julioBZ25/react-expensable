@@ -5,6 +5,7 @@ const CategoryContext = createContext();
 
 function CategoryProvider({ children }) {
   const [categories, setCategories] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [params, setParams] = useState("");
@@ -15,14 +16,42 @@ function CategoryProvider({ children }) {
     apiFetch("categories")
       .then((data) => {
           setCategories(data);
+          setParams(JSON.parse(localStorage.getItem("expensable_date")));
+          let partial = [];
+          data.forEach(category => {
+            const newTransactions = category.transactions.map(transaction => (
+              {
+                ...transaction,
+                categoryName: category.name,
+                color: category.color,
+                icon: category.icon,
+                tran_type: category.transaction_type
+              }
+              ));
+              
+              partial.push(...newTransactions)}
+              );
+
+          partial = partial?.reduce((tran, acc) => {
+            tran[acc.date] = [...tran[acc.date] || [], acc];
+            return tran;
+          }, {})
+
+          setTransactions(partial);
           setLoading(false);
-          setParams(JSON.parse(localStorage.getItem("expensable_date")))
+          
       })
       .catch((error) => {
         setLoading(false);
         setError(error);
       });
   }, []);
+
+  
+
+ 
+
+  
 
 
   return (
@@ -31,7 +60,9 @@ function CategoryProvider({ children }) {
       params,
       setParams,
       categories,
+      transactions,
       setCategories,
+      setTransactions,
       loading,
       error
     }}
