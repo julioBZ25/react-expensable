@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import LoginForm from "./components/login-form";
 import SignupForm from "./components/signup-form";
+import { useAuth } from "./context/auth-context";
 import { colors, typography } from "./styles";
 
 const Section = styled.div`
@@ -32,6 +33,7 @@ const CustomLink = styled.a`
 `;
 
 function UnauthenticatedApp() {
+  const { isLoading } = useAuth();
   const [showLogin, setShowLogin] = useState(true);
 
   function handleLinkClick(event) {
@@ -40,6 +42,10 @@ function UnauthenticatedApp() {
   }
 
   return (
+    isLoading
+    ?
+    "Loading..."
+    :
     <Section>
       <Container>
         <Title size="xl" bold>

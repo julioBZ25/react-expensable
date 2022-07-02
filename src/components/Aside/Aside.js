@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import { useCategories } from '../../context/category-context';
 import { typography } from '../../styles';
 import CardTransaction from '../CardTransaction';
 import CategoryCheckbox from '../CategoryCheckbox/CategoryCheckbox';
@@ -19,6 +19,34 @@ const AsideWrapper =  styled.div`
 `;
 
 function Aside(){
+
+  const { categories, params } = useCategories();
+
+  let transactions = [];
+  categories.forEach(category => {
+    const newTransactions = category.transactions.map(transaction => (
+      {
+        ...transaction,
+        categoryName: category.name,
+        color: category.color,
+        icon: category.icon,
+        tran_type: category.transaction_type
+      }
+    ));
+
+    transactions.push(...newTransactions)}
+  );
+
+  transactions = transactions?.reduce((tran, acc) => {
+    tran[acc.date] = [...tran[acc.date] || [], acc];
+    return tran;
+  }, {})
+
+  const dates = Object.keys(transactions).filter(date => {
+    const [ year, month ] = date.split("-");
+    return parseInt(year) === parseInt(params.year) && parseInt(month) - 1 === parseInt(params.month);
+  })
+
   return(
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
@@ -40,39 +68,36 @@ function Aside(){
       </Style.Section>
 
       <Style.CardsWrapper>
-        <CardTransaction 
-          type="day"
-          date="2022-05-15"
-          amount={700}
-        />
-        <CardTransaction 
-          type="transaction"
-          date="2022-05-10"
-          amount={350}
-          transaction="Rent"
-          tran_type="expense"
-          iconName="bank"
-          color="orange"
-        />
-        <CardTransaction 
-          type="transaction"
-          date="2022-05-09"
-          amount={800}
-          description="Description"
-          transaction="Work"
-          tran_type="income"
-          iconName="gift"
-          color="teal"
-        />
-        <CardTransaction 
-          type="day"
-          date="2018-09-31"
-          amount={700}
-          tran_type="expense"
-        />
+      { dates.map((date, index) => {
+          const amount = transactions[date].reduce((acc, el) => el.amount + acc , 0);
+
+          return (
+            <>
+              <CardTransaction 
+                type="day"
+                date={date}
+                amount={amount}
+                key={index}
+              />
+              {transactions[date].map((transaction, index) => (
+                <CardTransaction 
+                  type="transaction"
+                  date={transaction.date}
+                  amount={transaction.amount}
+                  transaction={transaction.categoryName}
+                  description="Description"
+                  tran_type={transaction.tran_type}
+                  iconName={transaction.icon}
+                  color={transaction.color}
+                  key={index}
+                />
+              ))}
+            </>
+          )
+        }) }
       </Style.CardsWrapper>
     </AsideWrapper>
   )
 }
 
-export default Aside
+export default Aside;

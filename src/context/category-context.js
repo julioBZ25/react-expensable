@@ -7,15 +7,16 @@ function CategoryProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [params, setParams] = useState("");
 
   useEffect(() => {
     setLoading(true);
     setError(null);
     apiFetch("categories")
       .then((data) => {
-        console.log(data)
-        setCategories(data);
-        setLoading(false);
+          setCategories(data);
+          setLoading(false);
+          setParams(JSON.parse(localStorage.getItem("expensable_date")))
       })
       .catch((error) => {
         setLoading(false);
@@ -27,6 +28,8 @@ function CategoryProvider({ children }) {
   return (
     <CategoryContext.Provider
       value={{
+      params,
+      setParams,
       categories,
       setCategories,
       loading,

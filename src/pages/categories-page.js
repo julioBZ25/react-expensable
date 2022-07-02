@@ -3,11 +3,9 @@ import { format, getMonth, getYear } from "date-fns";
 import Categories from "../components/Categories/categories";
 import MonthPicker from "../components/MonthPicker";
 import { typography } from "../styles";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useLocalStorage, useSearchParamsWithLocal } from "../hooks";
-import CategoryCheckbox from "../components/CategoryCheckbox/CategoryCheckbox";
-import { useState } from "react";
-import { getMonthlyData } from "../components/Categories/utils";
+import { useCategories } from "../context/category-context";
 
 const Title = styled.h1`
   ${typography.head.sm}
@@ -20,9 +18,10 @@ const initialDate = {
 };
 
 function CategoriesPage() {
-  let params = useParams();
+  const { loading, setParams } = useCategories();
+
   let location = useLocation();
-   
+  
   const [searchParams, setSearchParams] = useSearchParamsWithLocal(
     initialDate,
     "expensable_date"
@@ -40,8 +39,10 @@ function CategoriesPage() {
     const newMonth = date.month + 1;
     if (newMonth > 11) {
       setSearchParams({ year: date.year + 1, month: 0 });
+      setParams({ year: date.year + 1, month: 0 });
     } else {
       setSearchParams({ year: date.year, month: newMonth });
+      setParams({ year: date.year, month: newMonth });
     }
   };
 
@@ -49,12 +50,19 @@ function CategoriesPage() {
     const newMonth = date.month - 1;
     if (newMonth < 0) {
       setSearchParams({ year: date.year - 1, month: 11 });
+      setParams({ year: date.year - 1, month: 11 });
     } else {
       setSearchParams({ year: date.year, month: newMonth });
+      setParams({ year: date.year, month: newMonth });
     }
   };
 
+
   return (
+    loading
+    ?
+    "Loading..."
+    :
     <>
       <div>
         <Title>Categories</Title>

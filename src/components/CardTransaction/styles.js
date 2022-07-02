@@ -6,7 +6,7 @@ export const Container = styled.div`
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   font-family: ${fonts.primary};
   background-color: ${({ type }) => type === "day" ? colors.gray[200] : colors.white };
 `;
@@ -17,10 +17,12 @@ export const Day = styled.h2`
   font-weight: 600;
   font-size: 24px;
   line-height: 32px;
+  width: 40px;
+  text-align: center;
 `;
 
 export const Info = styled.div`
-  max-width: 85px;
+  width: 90px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -40,4 +42,10 @@ export const Amount = styled.h2`
   font-size: 20px;
   line-height: 28px;
   color: ${({ tran_type }) => tran_type === "expense" ? colors.red[500] : colors.green[600]};
+`;
+
+export const Section = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;

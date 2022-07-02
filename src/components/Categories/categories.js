@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import apiFetch from "../../services/api-fetch";
 import PropTypes from "prop-types";
 import { getMonthlyData } from "./utils";
@@ -7,7 +7,6 @@ import styled from "@emotion/styled";
 import { colors, typography } from "../../styles";
 import Calculator from "../Calculator/calculator";
 import NewCategoryForm from "./new-category-form";
-import CategoryCheckbox from "../CategoryCheckbox/CategoryCheckbox";
 import { useCategories } from "../../context/category-context";
 
 const Wrapper = styled.div`
