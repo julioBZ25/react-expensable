@@ -36,11 +36,11 @@ const CheckboxDiv = styled.div`
   gap: 0.25rem;
 `
 
-function CategoryCheckbox() {
+function CategoryCheckbox({ onChecked }) {
   const { categories } = useCategories();
 
   function handleChange(e) {
-    console.log(e.target.name)
+    onChecked(e.target.name);
   }
 
   return (
@@ -56,6 +56,7 @@ function CategoryCheckbox() {
               name={cat.name}
               onChange={handleChange}
               key={index}
+              defaultChecked={true}
             />
             <LabelCheckbox key={index + 1} htmlFor={cat.id || cat.name}>{cat.name}</LabelCheckbox>
           </CheckboxDiv>)
