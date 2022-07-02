@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   font-family: ${fonts.primary};
-  color: ${colors.gray[500]};
+  color: ${colors.gray[600]};
   gap: 4px;
 `;
 
@@ -18,7 +18,7 @@ export const Label = styled.label`
 
 export const StyledInput = styled.input`
   border: 1px solid ${colors.gray[200]};
-  color: ${colors.gray[500]};
+  color: ${colors.gray[600]};
   outline: none;
   box-sizing: border-box;
   padding: 8px 12px;
@@ -29,7 +29,7 @@ export const StyledInput = styled.input`
   border-radius: 6px;
   max-width: 140px;
   &:focus {
-    border: 1px solid ${colors.pink[400]};
-    box-shadow: 0px 0px 4px ${colors.pink[400]};
+    border: 1px solid ${colors.pink[300]};
+    box-shadow: 0px 0px 4px ${colors.pink[300]};
   }
 `;

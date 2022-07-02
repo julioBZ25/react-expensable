@@ -7,7 +7,7 @@ export const Section = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   font-family: ${ fonts.primary };
-  color: ${colors.gray[500]};
+  color: ${colors.gray[600]};
 `;
 
 export const Title = styled.h2`
