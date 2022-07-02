@@ -16,10 +16,10 @@ function CategoryProvider({ children }) {
     apiFetch("categories")
       .then((data) => {
           setCategories(data);
-          setParams(JSON.parse(localStorage.getItem("expensable_date")));
+          setParams(JSON.parse(localStorage.getItem("expensable_date"))); // { year: "2022", month: "08" }
           let partial = [];
-          data.forEach(category => {
-            const newTransactions = category.transactions.map(transaction => (
+          data.forEach(category => { // data = >categories 
+            const newTransactions = category.transactions.map(transaction => ( 
               {
                 ...transaction,
                 categoryName: category.name,
@@ -30,16 +30,15 @@ function CategoryProvider({ children }) {
               ));
               
               partial.push(...newTransactions)}
-              );
+          );
 
-          partial = partial?.reduce((tran, acc) => {
-            tran[acc.date] = [...tran[acc.date] || [], acc];
-            return tran;
+          partial = partial?.reduce((acc, tran) => {
+            acc[tran.date] = [...acc[tran.date] || [], tran];
+            return acc;
           }, {})
 
           setTransactions(partial);
           setLoading(false);
-          
       })
       .catch((error) => {
         setLoading(false);
