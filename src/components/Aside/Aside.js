@@ -24,7 +24,8 @@ function Aside(){
   const [transacFilter, setTransacFilter] = useState([]);
   const [minFilter, setminFilter] = useState('')
   const [maxFilter, setmaxFilter] = useState('')
-
+  const [filters, setFilters] = useState(categories.map(category => category.name));
+  const [dates, setDates] = useState([]);
 
   useEffect(() => {
     let partial = [];
@@ -42,27 +43,42 @@ function Aside(){
         partial.push(...newTransactions)}
         );
 
-    partial = partial?.reduce((tran, acc) => {
-      tran[acc.date] = [...tran[acc.date] || [], acc];
-      return tran;
-    }, {})
+      partial = partial?.reduce((acc, tran) => {
+        acc[tran.date] = [...acc[tran.date] || [], tran];
+        return acc;
+      }, {})
 
     setTransactions(partial);
     setTransacFilter(partial);
-  }, [categories, setTransactions]);
 
-  const dates = Object.keys(transacFilter).filter(date => {
-    const [ year, month ] = date.split("-");
-    return parseInt(year) === parseInt(params.year) && parseInt(month) - 1 === parseInt(params.month);
-  })
+    let initialDates = Object.keys(partial).filter(date => {
+      const [ year, month ] = date.split("-");
+      return parseInt(year) === parseInt(params.year) && parseInt(month) - 1 === parseInt(params.month);
+    })
+    setDates(initialDates);
 
-  function handleChecked(value) {
+  }, [categories, setTransactions, params]);
+
+  
+
+  useEffect(() => {
     let newTransactions = {};
 
     dates.forEach(date => {
-      newTransactions[date] = transactions[date].filter(transac => (transac.categoryName.includes(value)))
+      newTransactions[date] = transactions[date].filter(transac => (!filters.includes(transac.categoryName)))
     })
     setTransacFilter(newTransactions);
+
+  }, [filters, dates, transactions]);
+
+  function handleChecked(value) {
+    if(!filters.includes(value)) {
+      setFilters([...filters, value]);
+    }else {
+      const index = filters.findIndex(cat => cat === value);
+      filters.splice(index, 1);
+      setFilters([...filters]);
+    }
   }
 
   //Filter Amount Logic
@@ -98,7 +114,7 @@ function Aside(){
   return(
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
-      <CategoryCheckbox/>
+      <CategoryCheckbox onChecked={handleChecked} />
       <Style.Section>
         <Style.Title>Amount</Style.Title>
         <Style.InputsContainer>
@@ -118,6 +134,8 @@ function Aside(){
       <Style.CardsWrapper>
       { dates.map((date, index) => {
           const amount = amountFiltered[date].reduce((acc, el) => (
+      { dates?.map((date, index) => {
+          const amount = transacFilter[date]?.reduce((acc, el) => (
             el.tran_type === "expense" ? acc - el.amount : el.amount + acc 
           ), 0);
 
@@ -131,6 +149,7 @@ function Aside(){
                 tran_type={amount < 0 ? "expense" : "income"}
               />
               {amountFiltered[date].map((transaction, index) =>  {
+                //{transacFilter[date]?.map((transaction, index) => (
                 return (
                 <CardTransaction 
                   type="transaction"
