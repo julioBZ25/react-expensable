@@ -1,6 +1,6 @@
 import * as Style from "./styles";
 
-function InputFilter({ label, type, value, placeholder = "" }) {
+function InputFilter({ label, type, value, placeholder = "", onInputChange}) {
   return (
     <Style.Container>
       <Style.Label htmlFor={label}>{label}</Style.Label>
@@ -10,6 +10,7 @@ function InputFilter({ label, type, value, placeholder = "" }) {
         type={type || "text"}
         value={value}
         placeholder={placeholder}
+        onChange={(event) => onInputChange(event)}
       />
     </Style.Container>
   );

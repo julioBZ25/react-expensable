@@ -34,17 +34,15 @@ function Input({
   error,
   ...rest
 }) {
-  name ||= id;
-
   return (
     <InputContainer>
       {label && <Label htmlFor={id}>{label}</Label>}
+      {console.log(rest)}
       <StyledInput
         id={id}
         name={name}
         type={type}
         placeholder={placeholder}
-        {...rest}
       />
       {error && <Error size="sm">{error}</Error>}
     </InputContainer>

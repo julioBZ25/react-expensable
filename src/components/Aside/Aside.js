@@ -22,6 +22,9 @@ const AsideWrapper =  styled.div`
 function Aside(){
   const { transactions, params, categories, setTransactions } = useCategories();
   const [transacFilter, setTransacFilter] = useState([]);
+  const [minFilter, setminFilter] = useState('')
+  const [maxFilter, setmaxFilter] = useState('')
+
 
   useEffect(() => {
     let partial = [];
@@ -62,6 +65,36 @@ function Aside(){
     setTransacFilter(newTransactions);
   }
 
+  //Filter Amount Logic
+  function HandleInput(event){
+    switch (event.target.name) {
+      case 'min':
+        setminFilter(event.target.value)
+        break;
+      case 'max':
+        setmaxFilter(event.target.value)
+        break;
+      default:
+        break;
+    }
+  }
+
+  let amountFiltered = {};
+  dates.map( (date) => { 
+    amountFiltered[date] = transacFilter[date].map( (transaction) => {
+      const min =  minFilter === '' ? 0 : +minFilter
+      const max = maxFilter === '' ? Infinity : +maxFilter
+      if (transaction.amount >= min){
+        if(maxFilter === '0'){
+          return transaction
+        }
+        else if (transaction.amount <= max){
+          return transaction
+        }
+      }
+    }).filter( (el) => el !== undefined )
+  })
+
   return(
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
@@ -69,8 +102,8 @@ function Aside(){
       <Style.Section>
         <Style.Title>Amount</Style.Title>
         <Style.InputsContainer>
-          <InputFilter label="min"/>
-          <InputFilter label="max"/>
+          <InputFilter label="min" onInputChange={HandleInput} value={minFilter} placeholder={0}/>
+          <InputFilter label="max" onInputChange={HandleInput} value={maxFilter} placeholder={100}/>
         </Style.InputsContainer>
       </Style.Section>
 
@@ -84,7 +117,7 @@ function Aside(){
 
       <Style.CardsWrapper>
       { dates.map((date, index) => {
-          const amount = transacFilter[date].reduce((acc, el) => (
+          const amount = amountFiltered[date].reduce((acc, el) => (
             el.tran_type === "expense" ? acc - el.amount : el.amount + acc 
           ), 0);
 
@@ -97,7 +130,8 @@ function Aside(){
                 key={index}
                 tran_type={amount < 0 ? "expense" : "income"}
               />
-              {transacFilter[date].map((transaction, index) => (
+              {amountFiltered[date].map((transaction, index) =>  {
+                return (
                 <CardTransaction 
                   type="transaction"
                   date={transaction.date}
@@ -109,7 +143,7 @@ function Aside(){
                   color={transaction.color}
                   key={index}
                 />
-              ))}
+              )})}
             </>
           )
         }) }
