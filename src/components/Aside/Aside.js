@@ -39,10 +39,10 @@ function Aside(){
         partial.push(...newTransactions)}
         );
 
-    partial = partial?.reduce((tran, acc) => {
-      tran[acc.date] = [...tran[acc.date] || [], acc];
-      return tran;
-    }, {})
+      partial = partial?.reduce((acc, tran) => {
+        acc[tran.date] = [...acc[tran.date] || [], tran];
+        return acc;
+      }, {})
 
     setTransactions(partial);
     setTransacFilter(partial);
