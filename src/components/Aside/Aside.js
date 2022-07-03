@@ -49,7 +49,6 @@ function Aside(){
       }, {})
 
     setTransactions(partial);
-    setTransacFilter(partial);
 
     let initialDates = Object.keys(partial).filter(date => {
       const [ year, month ] = date.split("-");
@@ -96,8 +95,8 @@ function Aside(){
   }
 
   let amountFiltered = {};
-  dates.map( (date) => { 
-    amountFiltered[date] = transacFilter[date].map( (transaction) => {
+  dates?.forEach( (date) => {
+    amountFiltered[date] = transacFilter[date]?.map( (transaction) => {
       const min =  minFilter === '' ? 0 : +minFilter
       const max = maxFilter === '' ? Infinity : +maxFilter
       if (transaction.amount >= min){
@@ -111,7 +110,7 @@ function Aside(){
     }).filter( (el) => el !== undefined )
   })
 
-  return(
+  return (
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
       <CategoryCheckbox onChecked={handleChecked} />
@@ -132,10 +131,8 @@ function Aside(){
       </Style.Section>
 
       <Style.CardsWrapper>
-      { dates.map((date, index) => {
-          const amount = amountFiltered[date].reduce((acc, el) => (
       { dates?.map((date, index) => {
-          const amount = transacFilter[date]?.reduce((acc, el) => (
+          const amount = amountFiltered[date]?.reduce((acc, el) => (
             el.tran_type === "expense" ? acc - el.amount : el.amount + acc 
           ), 0);
 
@@ -148,8 +145,7 @@ function Aside(){
                 key={index}
                 tran_type={amount < 0 ? "expense" : "income"}
               />
-              {amountFiltered[date].map((transaction, index) =>  {
-                //{transacFilter[date]?.map((transaction, index) => (
+              {amountFiltered[date]?.map((transaction, index) =>  {
                 return (
                 <CardTransaction 
                   type="transaction"
@@ -165,7 +161,7 @@ function Aside(){
               )})}
             </>
           )
-        }) }
+        })}
       </Style.CardsWrapper>
     </AsideWrapper>
   )
