@@ -56,7 +56,7 @@ function CategoryCheckbox({ onChecked }) {
               name={cat.name}
               onChange={handleChange}
               key={index}
-              defaultChecked={true}
+              defaultChecked={false}
             />
             <LabelCheckbox key={index + 1} htmlFor={cat.id || cat.name}>{cat.name}</LabelCheckbox>
           </CheckboxDiv>)

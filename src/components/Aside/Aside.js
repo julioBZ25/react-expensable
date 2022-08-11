@@ -10,7 +10,6 @@ import * as Style from "./ui";
 const TransactionTitle =styled.h1` 
   ${typography.head['sm']}
 `;
-
 const AsideWrapper =  styled.div`
   display: flex;
   gap: 1rem;
@@ -26,6 +25,7 @@ function Aside(){
   const [maxFilter, setmaxFilter] = useState('')
   const [filters, setFilters] = useState(categories.map(category => category.name));
   const [dates, setDates] = useState([]);
+  console.log('filtro inicial', filters)
 
   useEffect(() => {
     let partial = [];
@@ -58,19 +58,25 @@ function Aside(){
 
   }, [categories, setTransactions, params]);
 
-  
-
   useEffect(() => {
     let newTransactions = {};
-
-    dates.forEach(date => {
-      newTransactions[date] = transactions[date].filter(transac => (!filters.includes(transac.categoryName)))
-    })
-    setTransacFilter(newTransactions);
-
+    // if (!filters.length) return
+    // if (newTransactions !== null) {}
+    if (filters.length !== 0) {
+      dates.forEach(date => {
+        newTransactions[date] = transactions[date].filter((transac) => {
+          return filters.includes(transac.categoryName)
+        })
+      })
+      console.log(transactions)
+      setTransacFilter(newTransactions);
+    }else {
+      setTransacFilter(transactions);
+    }
   }, [filters, dates, transactions]);
 
   function handleChecked(value) {
+
     if(!filters.includes(value)) {
       setFilters([...filters, value]);
     }else {
