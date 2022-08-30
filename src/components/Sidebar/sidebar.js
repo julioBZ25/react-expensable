@@ -20,7 +20,7 @@ function Sidebar() {
     <S.Wrapper>
       <Logo />
       <SidebarNav />
-      <CustomLink onClick={() => logout()}>Logout</CustomLink>
+      {/* <CustomLink onClick={() => logout()}>Logout</CustomLink> */}
     </S.Wrapper>
   );
 }

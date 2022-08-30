@@ -10,7 +10,6 @@ export function useSearchParamsWithLocal(initialValue = {}, localStorageKey) {
   }
 
   const [searchParams, setSearchParams] = useSearchParams(setInitialValue());
-  // console.log(Array.from(searchParams.entries()));
 
   useEffect(() => {
     const newObject = Array.from(searchParams.entries()).reduce(

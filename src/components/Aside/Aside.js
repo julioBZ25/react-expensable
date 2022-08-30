@@ -21,11 +21,13 @@ const AsideWrapper =  styled.div`
 function Aside(){
   const { transactions, params, categories, setTransactions } = useCategories();
   const [transacFilter, setTransacFilter] = useState([]);
-  const [minFilter, setminFilter] = useState('')
-  const [maxFilter, setmaxFilter] = useState('')
+  const [minFilter, setminFilter] = useState('');
+  const [maxFilter, setmaxFilter] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [filters, setFilters] = useState(categories.map(category => category.name));
   const [dates, setDates] = useState([]);
-  console.log('filtro inicial', filters)
+  let amountFiltered = {};
 
   useEffect(() => {
     let partial = [];
@@ -47,28 +49,22 @@ function Aside(){
         acc[tran.date] = [...acc[tran.date] || [], tran];
         return acc;
       }, {})
-
     setTransactions(partial);
-
     let initialDates = Object.keys(partial).filter(date => {
       const [ year, month ] = date.split("-");
       return parseInt(year) === parseInt(params.year) && parseInt(month) - 1 === parseInt(params.month);
     })
     setDates(initialDates);
-
   }, [categories, setTransactions, params]);
 
   useEffect(() => {
     let newTransactions = {};
-    // if (!filters.length) return
-    // if (newTransactions !== null) {}
     if (filters.length !== 0) {
       dates.forEach(date => {
         newTransactions[date] = transactions[date].filter((transac) => {
           return filters.includes(transac.categoryName)
         })
       })
-      console.log(transactions)
       setTransacFilter(newTransactions);
     }else {
       setTransacFilter(transactions);
@@ -76,7 +72,6 @@ function Aside(){
   }, [filters, dates, transactions]);
 
   function handleChecked(value) {
-
     if(!filters.includes(value)) {
       setFilters([...filters, value]);
     }else {
@@ -87,35 +82,35 @@ function Aside(){
   }
 
   //Filter Amount Logic
-  function HandleInput(event){
+  function handleInput(event){
     switch (event.target.name) {
       case 'min':
-        setminFilter(event.target.value)
+        setminFilter(event.target.value);
         break;
       case 'max':
-        setmaxFilter(event.target.value)
+        setmaxFilter(event.target.value);
+        break;
+      case 'from':
+        setStartDate(event.target.value);
+        break;
+      case 'to':
+        setEndDate(event.target.value);
         break;
       default:
         break;
     }
   }
 
-  let amountFiltered = {};
   dates?.forEach( (date) => {
-    amountFiltered[date] = transacFilter[date]?.map( (transaction) => {
-      const min =  minFilter === '' ? 0 : +minFilter
-      const max = maxFilter === '' ? Infinity : +maxFilter
-      if (transaction.amount >= min){
-        if(maxFilter === '0'){
-          return transaction
-        }
-        else if (transaction.amount <= max){
-          return transaction
-        }
-      }
-    }).filter( (el) => el !== undefined )
+    amountFiltered[date] = transacFilter[date]?.filter( (transaction) => {
+      const min =  minFilter === '' ? 0 : +minFilter;
+      const max = maxFilter === '' ? Infinity : +maxFilter;
+      const fromDate = !startDate || new Date(startDate).getTime() <= new Date(transaction.date).getTime(); 
+      const toDate = !endDate || new Date(endDate).getTime() >= new Date(transaction.date).getTime();
+      return (transaction.amount >= min && transaction.amount <= max &&  fromDate && toDate);
+    })
   })
-
+  
   return (
     <AsideWrapper>
       <TransactionTitle>Transactions</TransactionTitle>
@@ -123,16 +118,16 @@ function Aside(){
       <Style.Section>
         <Style.Title>Amount</Style.Title>
         <Style.InputsContainer>
-          <InputFilter label="min" onInputChange={HandleInput} value={minFilter} placeholder={0}/>
-          <InputFilter label="max" onInputChange={HandleInput} value={maxFilter} placeholder={100}/>
+          <InputFilter label="min" onInputChange={handleInput} value={minFilter} placeholder={0}/>
+          <InputFilter label="max" onInputChange={handleInput} value={maxFilter} placeholder={100}/>
         </Style.InputsContainer>
       </Style.Section>
 
       <Style.Section>
         <Style.Title>Date</Style.Title>
         <Style.InputsContainer>
-          <InputFilter label="from" type="date"/>
-          <InputFilter label="to" type="date"/>
+          <InputFilter label="from" type="date" onInputChange={handleInput} value={startDate || ''} />
+          <InputFilter label="to" type="date" onInputChange={handleInput} value={endDate || ''}/>
         </Style.InputsContainer>
       </Style.Section>
 
@@ -143,12 +138,11 @@ function Aside(){
           ), 0);
 
           return (
-            <>
+            <div key={index}>
               <CardTransaction 
                 type="day"
                 date={date}
                 amount={amount}
-                key={index}
                 tran_type={amount < 0 ? "expense" : "income"}
               />
               {amountFiltered[date]?.map((transaction, index) =>  {
@@ -165,7 +159,7 @@ function Aside(){
                   key={index}
                 />
               )})}
-            </>
+            </div>
           )
         })}
       </Style.CardsWrapper>

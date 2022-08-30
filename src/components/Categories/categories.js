@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiFetch from "../../services/api-fetch";
 import PropTypes from "prop-types";
 import { getMonthlyData } from "./utils";
@@ -95,6 +95,20 @@ function Categories({ date, type }) {
       .catch((error) => console.log(error));
   }
 
+  useEffect(() => {
+    function handleEscape(e) {
+      if (e.key === 'Escape') { 
+        setIsOpenCalcModal(false);
+        setIsOpenCatModal(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, []);
+  
   if (loading) return <p>Loading categories...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
