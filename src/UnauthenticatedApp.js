@@ -6,10 +6,11 @@ import { useAuth } from "./context/auth-context";
 import { colors, typography } from "./styles";
 
 const Section = styled.div`
-  margin: 96px auto;
+  height: 100%;
 `;
 
 const Container = styled.div`
+  padding-top: 44px;
   max-width: 480px;
   margin: 0 auto;
   display: flex;
