@@ -16,6 +16,7 @@ const AsideWrapper =  styled.div`
   flex-direction: column;
   padding: 24px 8px 0 32px;
   border-left: 1px solid #D1D5DB;
+  overflow-y: auto;
 `;
 
 function Aside(){
