@@ -66,7 +66,7 @@ function NewCategoryForm({ onClose, onSubmit, type }) {
     <Card>
       <Header>
         <Title>New Category</Title>
-        <GrClose onClick={onClose} />
+        <GrClose style={{ cursor: "pointer", height: "24px", width: "24px" }} onClick={onClose} />
       </Header>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <label htmlFor="name">Name</label>
